@@ -1,6 +1,4 @@
-Ah, got it! Let’s make a **Windows-focused, clean, no-fluff README** that reflects exactly what your CLI does on Windows. Here’s the revised version:
 
-````markdown
 # Haridham CLI
 
 Haridham CLI is an **interactive terminal tool for Windows** that simplifies Git commands with `hari`-prefixed shortcuts while also supporting all normal Windows terminal commands. It shows your **current folder** when navigating (`cd`) or creating directories (`mkdir`).  
@@ -92,4 +90,4 @@ Displays a list of available `hari` commands and usage instructions.
 
 MIT License — free to use, modify, and distribute.
 
-```
+
