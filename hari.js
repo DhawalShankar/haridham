@@ -125,6 +125,6 @@ exit                  : Quit Haridham CLI
   execShell(input);
 
 }).on('close', () => {
-  console.log('Goodbye!');
+  console.log('Raam Raam!');
   process.exit(0);
 });

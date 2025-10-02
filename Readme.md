@@ -1,123 +1,95 @@
+Ah, got it! Let’s make a **Windows-focused, clean, no-fluff README** that reflects exactly what your CLI does on Windows. Here’s the revised version:
+
+````markdown
 # Haridham CLI
 
-Haridham CLI (`hari`) is a custom terminal interface and Git wrapper designed to simplify Git operations with branded commands. It allows users to manage repositories locally, run Git commands, and interact with an interactive terminal environment.
+Haridham CLI is an **interactive terminal tool for Windows** that simplifies Git commands with `hari`-prefixed shortcuts while also supporting all normal Windows terminal commands. It shows your **current folder** when navigating (`cd`) or creating directories (`mkdir`).  
 
 ---
 
-## Features
+## **Features**
 
-* Interactive terminal (`haridham>`) for command input.
-* Branded commands:
+### Custom `hari` Commands (Git Shortcuts)
 
-  * `hari srajan <repo>` → Create a new local repository
-  * `hari drishti` → List all local repositories
-* Full Git command support as fallback (`status`, `add`, `commit`, `push`, `pull`, etc.)
-* Works on Windows, Linux, and macOS.
-* Easy to run globally via `npm link`.
+| Haridham Command       | Description                                |
+|-----------------------|--------------------------------------------|
+| `hari srajan`         | Initialize a Git repository (`git init`) in the current folder |
+| `hari drishti`        | Show Git status (`git status`)            |
+| `hari yog <files>`    | Stage files for commit (`git add <files>`) |
+| `hari commit <msg>`   | Commit changes (`git commit -m "<msg>"`) |
+| `hari push`           | Push to the remote repository (`git push`) |
+| `hari pull`           | Pull from the remote repository (`git pull`) |
+| `hari log`            | Show commit history (`git log`)           |
 
----
-
-## Installation
-
-1. Clone the repository:
-
-```
-git clone <your-repo-url>
-cd haridham-backend
-```
-
-2. Install dependencies:
-
-```
-npm install
-```
-
-3. Link globally for CLI access:
-
-```
-npm link
-```
+> Unknown `hari <command>` automatically runs as `git <command>`.
 
 ---
 
-## Usage
+### Normal Windows Commands
 
-Launch the interactive terminal:
+- Run any terminal command (`dir`, `echo`, `npm install`, etc.)  
+- `cd <folder>` → changes directory and shows current folder  
+- `mkdir <folder>` → creates folder and shows current folder  
+- `ls` is aliased to `dir` for convenience  
 
-```
-hari
-```
+---
 
-You will see the prompt:
+## **Installation**
 
-```
-haridham>
+1. Clone the repository:  
+```powershell
+git clone <repo-url>
+cd haridham-cli
+````
+
+2. Run the CLI:
+
+```powershell
+node haridham.js or hari
 ```
 
 ---
 
-### Example Commands
+## **Usage Examples**
 
-* Create a new repository:
+```powershell
+haridham> hari srajan
+Initialized empty Git repository in C:\Users\User\projects
 
-```
-haridham> hari srajan my-project
-```
-
-* List repositories:
-
-```
 haridham> hari drishti
+On branch main
+Your branch is up to date with 'origin/main'.
+nothing to commit, working tree clean
+
+haridham> hari yog .
+haridham> hari commit "Initial commit"
+[main (root-commit) abc123] Initial commit
+ 1 file changed, 1 insertion(+)
+
+haridham> mkdir myfolder
+Directory created: C:\Users\User\projects\myfolder
+Current folder: C:\Users\User\projects
+
+haridham> cd myfolder
+Moved to folder: C:\Users\User\projects\myfolder
+
+haridham> dir
 ```
 
-* Run Git commands (works like normal Git):
+---
 
-```
-haridham> status
-haridham> add .
-haridham> commit -m "Initial commit"
-haridham> push origin main
-```
+### Help Command
 
-* Exit the terminal:
-
-```
-haridham> exit
-```
-
-* Show help:
-
-```
+```powershell
 haridham> help
 ```
 
+Displays a list of available `hari` commands and usage instructions.
+
 ---
 
-## Project Structure
+## **License**
+
+MIT License — free to use, modify, and distribute.
 
 ```
-haridham-backend/
-├─ hari.js           # CLI entrypoint
-├─ repos/            # Local repositories storage
-├─ package.json
-└─ node_modules/
-```
-
----
-
-## Notes
-
-* This is a **mini project MVP**, focusing on CLI and interactive Git workflow.
-* Future enhancements can include:
-
-  * Remote repository integration (GitHub/GitLab/Haridham server)
-  * Additional branded commands (`suci` for issues, etc.)
-  * Colorful terminal UI or menus
-
----
-
-## License
-
-MIT License
-
----
