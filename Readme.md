@@ -14,10 +14,10 @@ Haridham CLI is an **interactive terminal tool for Windows** that simplifies Git
 | `hari srajan`         | Initialize a Git repository (`git init`) in the current folder |
 | `hari drishti`        | Show Git status (`git status`)            |
 | `hari yog <files>`    | Stage files for commit (`git add <files>`) |
-| `hari commit <msg>`   | Commit changes (`git commit -m "<msg>"`) |
-| `hari push`           | Push to the remote repository (`git push`) |
-| `hari pull`           | Pull from the remote repository (`git pull`) |
-| `hari log`            | Show commit history (`git log`)           |
+| `hari samarpit <msg>`   | Commit changes (`git commit -m "<msg>"`) |
+| `hari bhejo`           | Push to the remote repository (`git push`) |
+| `hari lao`           | Pull from the remote repository (`git pull`) |
+| `hari khoj`            | Show commit history (`git log`)           |
 
 > Unknown `hari <command>` automatically runs as `git <command>`.
 

@@ -10,10 +10,10 @@ const hariCommands = {
   'srajan': () => execGit('init'),
   'drishti': () => execGit('status'),
   'yog': (args) => execGit('add', args),
-  'push': (args) => execGit('push', args),
-  'pull': (args) => execGit('pull', args),
-  'commit': (args) => execGit('commit', args),
-  'log': (args) => execGit('log', args),
+  'bhejo': (args) => execGit('push', args),
+  'lao': (args) => execGit('pull', args),
+  'samarpit': (args) => execGit('commit', args),
+  'khoj': (args) => execGit('log', args),
 };
 
 // Execute Git commands using spawn
@@ -92,13 +92,13 @@ rl.on('line', (line) => {
     console.log(`
 Haridham CLI Commands:
 
-hari srajan           : git init (current directory)
-hari drishti          : git status (current directory)
-hari yog <files>      : git add <files>
-hari commit <msg>     : git commit
-hari push             : git push
-hari pull             : git pull
-hari log              : git log
+    hari srajan : Initialize a Git repository (git init) in the current directory
+    hari drishti : Show Git status (git status) in the current directory
+    hari yog <files> : Stage files for commit (git add <files>)
+    hari samarpit <msg> : Commit changes with message (git commit -m "<msg>")
+    hari bhejo : Push to the remote repository (git push)
+    hari lao : Pull from the remote repository (git pull)
+    hari khoj : Show commit history (git log)
 
 Other commands can be used as normal terminal commands.
 cd <folder>           : change directory
