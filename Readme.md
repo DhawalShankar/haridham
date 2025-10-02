@@ -27,8 +27,7 @@ Haridham CLI is an **interactive terminal tool for Windows** that simplifies Git
 
 - Run any terminal command (`dir`, `echo`, `npm install`, etc.)  
 - `cd <folder>` → changes directory and shows current folder  
-- `mkdir <folder>` → creates folder and shows current folder  
-- `ls` is aliased to `dir` for convenience  
+- `mkdir <folder>` → creates folder and shows current folder   
 
 ---
 
