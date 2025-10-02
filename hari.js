@@ -1,15 +1,74 @@
 #!/usr/bin/env node
 
 const readline = require('readline');
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Directory to store local repos
-const REPOS_DIR = path.join(__dirname, 'repos');
-if (!fs.existsSync(REPOS_DIR)) fs.mkdirSync(REPOS_DIR, { recursive: true });
+// Map custom hari commands to git commands
+const hariCommands = {
+  'srajan': () => execGit('init'),
+  'drishti': () => execGit('status'),
+  'yog': (args) => execGit('add', args),
+  'push': (args) => execGit('push', args),
+  'pull': (args) => execGit('pull', args),
+  'commit': (args) => execGit('commit', args),
+  'log': (args) => execGit('log', args),
+};
 
-// Initialize readline interface
+// Execute Git commands using spawn
+function execGit(command, args = []) {
+  const git = spawn('git', [command, ...args], { stdio: 'inherit', shell: true });
+  git.on('close', () => rl.prompt());
+}
+
+// Execute shell commands
+function execShell(commandLine) {
+  const [cmd, ...args] = commandLine.split(' ');
+
+  // Handle cd
+  if (cmd === 'cd') {
+    try {
+      const targetDir = args[0] || process.env.HOME; // default to home
+      process.chdir(targetDir);
+      console.log(`Moved to folder: ${process.cwd()}`);
+    } catch (err) {
+      console.error(`cd: ${err.message}`);
+    }
+    rl.prompt();
+    return;
+  }
+
+  // Handle mkdir
+  if (cmd === 'mkdir') {
+    const dirName = args[0];
+    if (!dirName) {
+      console.error('mkdir: missing directory name');
+      rl.prompt();
+      return;
+    }
+    const fullPath = path.join(process.cwd(), dirName);
+    try {
+      fs.mkdirSync(fullPath, { recursive: true });
+      console.log(`Directory created: ${fullPath}`);
+      console.log(`Current folder: ${process.cwd()}`);
+    } catch (err) {
+      console.error(`mkdir: ${err.message}`);
+    }
+    rl.prompt();
+    return;
+  }
+
+  // Alias ls → dir on Windows
+  if (process.platform === 'win32' && cmd === 'ls') {
+    commandLine = 'dir';
+  }
+
+  const shell = spawn(commandLine, { stdio: 'inherit', shell: true });
+  shell.on('close', () => rl.prompt());
+}
+
+// Initialize readline
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -23,72 +82,48 @@ rl.prompt();
 
 rl.on('line', (line) => {
   const input = line.trim();
-  if (!input) {
-    rl.prompt();
-    return;
-  }
+  if (!input) return rl.prompt();
 
-  const [cmd, ...args] = input.split(' ');
+  const [first, ...args] = input.split(' ');
 
-  // Exit command
-  if (cmd === 'exit') {
-    rl.close();
-    return;
-  }
+  if (first === 'exit') return rl.close();
 
-  // Help command
-  if (cmd === 'help') {
+  if (first === 'help') {
     console.log(`
 Haridham CLI Commands:
 
-srajan <repo>   : Create a new local repository
-drishti         : List all local repositories
-<git command>   : Any Git command works (status, commit, push, pull, etc.)
-exit            : Quit Haridham CLI
+hari srajan           : git init (current directory)
+hari drishti          : git status (current directory)
+hari yog <files>      : git add <files>
+hari commit <msg>     : git commit
+hari push             : git push
+hari pull             : git pull
+hari log              : git log
+
+Other commands can be used as normal terminal commands.
+cd <folder>           : change directory
+mkdir <folder>        : create a folder
+exit                  : Quit Haridham CLI
 `);
     rl.prompt();
     return;
   }
 
-  // Branded command: srajan (create repo)
-  if (cmd === 'hari srajan') {
-    const repoName = args[0];
-    if (!repoName) {
-      console.log('Usage: srajan <repo-name>');
-      rl.prompt();
-      return;
+  if (first === 'hari') {
+    const subCmd = args[0];
+    const subArgs = args.slice(1);
+    if (hariCommands[subCmd]) {
+      hariCommands[subCmd](subArgs);
+    } else {
+      // Unknown hari command → treat as git command
+      execGit(subCmd, subArgs);
     }
-    const repoPath = path.join(REPOS_DIR, repoName);
-    if (fs.existsSync(repoPath)) {
-      console.log(`Repository "${repoName}" already exists.`);
-      rl.prompt();
-      return;
-    }
-    fs.mkdirSync(repoPath, { recursive: true });
-    exec(`git init ${repoPath}`, (err, stdout, stderr) => {
-      if (err) console.error(err.message);
-      else console.log(`Repository "${repoName}" created at ${repoPath}`);
-      rl.prompt();
-    });
-    return;
+    return; // rl.prompt handled in execGit
   }
 
-  // Branded command: drishti (list repos)
-  if (cmd === 'hari drishti') {
-    const repos = fs.existsSync(REPOS_DIR) ? fs.readdirSync(REPOS_DIR) : [];
-    if (!repos.length) console.log('No repositories found.');
-    else console.log('Repositories:', repos.join(', '));
-    rl.prompt();
-    return;
-  }
+  // Not a hari command → run as normal shell command
+  execShell(input);
 
-  // Fallback: run as Git command
-  exec(`git ${input}`, (err, stdout, stderr) => {
-    if (err) console.error(err.message);
-    if (stderr) console.error(stderr);
-    if (stdout) console.log(stdout);
-    rl.prompt();
-  });
 }).on('close', () => {
   console.log('Goodbye!');
   process.exit(0);
